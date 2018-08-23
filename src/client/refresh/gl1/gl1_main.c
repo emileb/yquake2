@@ -953,6 +953,7 @@ R_SetGL2D(void)
 void
 R_RenderView(refdef_t *fd)
 {
+#ifndef USE_GLES1
 	if ((gl_state.stereo_mode != STEREO_MODE_NONE) && gl_state.camera_separation) {
 
 		qboolean drawing_left_eye = gl_state.camera_separation < 0;
@@ -1060,7 +1061,7 @@ R_RenderView(refdef_t *fd)
 				break;
 		}
 	}
-
+#endif
 
 	if (r_norefresh->value)
 	{
@@ -1661,7 +1662,7 @@ RI_BeginFrame(float camera_separation)
 	if (gl_drawbuffer->modified)
 	{
 		gl_drawbuffer->modified = false;
-
+#ifndef USE_GLES1
 		if ((gl_state.camera_separation == 0) || gl_state.stereo_mode != STEREO_MODE_OPENGL)
 		{
 			if (Q_stricmp(gl_drawbuffer->string, "GL_FRONT") == 0)
@@ -1673,6 +1674,7 @@ RI_BeginFrame(float camera_separation)
 				glDrawBuffer(GL_BACK);
 			}
 		}
+#endif
 	}
 
 	/* texturemode stuff */

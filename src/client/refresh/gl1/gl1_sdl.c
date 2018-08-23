@@ -32,7 +32,13 @@
 #if defined(__APPLE__)
 #include <OpenGL/gl.h>
 #else
+
+#ifdef USE_GLES1
+#include <GLES/gl.h>
+#else
 #include <GL/gl.h>
+#endif
+
 #endif
 
 static SDL_Window* window = NULL;
@@ -183,6 +189,11 @@ int RI_InitContext(void* win)
 	const char* glver = (char *)glGetString(GL_VERSION);
 	sscanf(glver, "%d.%d", &gl_config.major_version, &gl_config.minor_version);
 
+#ifdef USE_GLES1
+	R_Printf( PRINT_ALL, "glver = %s", glver );
+	gl_config.major_version = 1;
+	gl_config.minor_version = 4;
+#endif
 	if (gl_config.major_version < 1 || (gl_config.major_version == 1 && gl_config.minor_version < 4))
 	{
 		R_Printf(PRINT_ALL, "R_InitContext(): Got an OpenGL version %d.%d context - need (at least) 1.4!\n", gl_config.major_version, gl_config.minor_version);

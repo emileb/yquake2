@@ -755,7 +755,7 @@ R_DrawAliasModel(entity_t *e)
 	glShadeModel(GL_FLAT);
 
 	glPopMatrix();
-
+#ifndef USE_GLES1
 	if (gl_showbbox->value)
 	{
 		glDisable(GL_CULL_FACE);
@@ -773,7 +773,7 @@ R_DrawAliasModel(entity_t *e)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glEnable(GL_CULL_FACE);
 	}
-
+#endif
 	if (currententity->flags & RF_WEAPONMODEL)
 	{
 		glMatrixMode(GL_PROJECTION);
