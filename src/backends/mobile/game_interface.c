@@ -125,8 +125,7 @@ void IN_Move_Android( void )
 extern int key_dest;
 touchscreemode_t PortableGetScreenMode()
 {
-return TS_MENU;
-
+	return TS_MENU;
 }
 
 
