@@ -241,7 +241,15 @@ static OGG_Read(void)
 	}
 	else
 	{
-		OGG_Stop();
+		// We cannot call OGG_Stop() here. It flushes the OpenAL sample
+		// queue, thus about 12 seconds of music are lost. Instead we
+		// just set the OGG state to stop and open a new file. The new
+		// files content is added to the sample queue after the remaining
+		// samples from the old file.
+		stb_vorbis_close(ogg_file);
+		ogg_status = STOP;
+		ogg_numbufs = 0;
+
 		OGG_PlayTrack(ogg_curfile);
 	}
 }
@@ -478,8 +486,6 @@ OGG_Stop(void)
 
 	stb_vorbis_close(ogg_file);
 	ogg_status = STOP;
-	// FIXME
-	//ogg_info = NULL;
 	ogg_numbufs = 0;
 }
 
@@ -508,6 +514,20 @@ OGG_TogglePlayback(void)
 }
 
 /*
+ * Prints a help message for the 'ogg' cmd.
+ */
+void
+OGG_HelpMsg(void)
+{
+	Com_Printf("Unknown sub command %s\n\n", Cmd_Argv(1));
+	Com_Printf("Commands:\n");
+	Com_Printf(" - info: Print information about playback state and tracks\n");
+	Com_Printf(" - play <track>: Play track number <track>\n");
+	Com_Printf(" - stop: Stop playback\n");
+	Com_Printf(" - toggle: Toggle pause\n");
+}
+
+/*
  * The 'ogg' cmd. Gives some control and information about the playback state.
  */
 void
@@ -515,7 +535,7 @@ OGG_Cmd(void)
 {
 	if (Cmd_Argc() < 2)
 	{
-		Com_Printf("ogg <command> : Control Ogg/Vorbis playback\n");
+		OGG_HelpMsg();
 		return;
 	}
 
@@ -553,12 +573,7 @@ OGG_Cmd(void)
 	}
 	else
 	{
-		Com_Printf("Unknown sub command %s\n\n", Cmd_Argv(1));
-		Com_Printf("Commands:\n");
-		Com_Printf(" - info: Print information about playback state and tracks\n");
-		Com_Printf(" - play <track>: Play track number <track>\n");
-		Com_Printf(" - stop: Stop playback\n");
-		Com_Printf(" - toggle: Toggle pause\n");
+		OGG_HelpMsg();
 	}
 }
 
