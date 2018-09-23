@@ -44,6 +44,11 @@
 #define glDepthRange glDepthRangef
 #define glOrtho      glOrthof
 #define glFrustum    glFrustumf
+
+#elif USE_GLES3
+
+#include <GLES3/gl3.h>
+
 #else
 #include <GL/gl.h>
 #endif

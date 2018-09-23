@@ -630,7 +630,9 @@ CL_InitInput(void)
 
 	cl_nodelta = Cvar_Get("cl_nodelta", "0", 0);
 }
-
+#ifdef __ANDROID__
+    void IN_Move_Android( usercmd_t *cmd );
+#endif
 void
 CL_RefreshCmd(void)
 {
@@ -656,6 +658,9 @@ CL_RefreshCmd(void)
 	// Add movement
 	CL_BaseMove(cmd);
 	IN_Move(cmd);
+#ifdef __ANDROID__
+    IN_Move_Android(cmd);
+#endif
 
 	// Clamp angels for prediction
 	CL_ClampPitch();
@@ -708,7 +713,9 @@ CL_RefreshMove(void)
 	// Add movement
 	CL_BaseMove(cmd);
 	IN_Move(cmd);
-
+#ifdef __ANDROID__
+    IN_Move_Android(cmd);
+#endif
 	old_sys_frame_time = sys_frame_time;
 }
 

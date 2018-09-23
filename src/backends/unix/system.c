@@ -354,7 +354,11 @@ Sys_UnloadGame(void)
 }
 
 #ifdef __ANDROID__
+
+#include "quake_game_dll.h"
 extern const char *nativeLibsPath;
+int getGameType();
+
 #endif
 
 void *
@@ -369,7 +373,15 @@ Sys_GetGameAPI(void *parms)
 	const char *gamename = "game.dylib";
 #else
 #ifdef __ANDROID__
-	const char *gamename = "libyquake2_game.so";
+	const char *gamename;
+	if( getGameType() == Q2DLL_GAME )
+	{
+	    gamename = "libyquake2_game.so";
+    }
+    else if( getGameType() == Q2DLL_ROGUE )
+    {
+        gamename = "libyquake2_rogue.so";
+    }
 #else
 	const char *gamename = "game.so";
 #endif

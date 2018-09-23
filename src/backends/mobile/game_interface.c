@@ -3,6 +3,7 @@
 #include "SDL.h"
 #include "SDL_keycode.h"
 
+#include "../../client/header/client.h"
 
 // =================== FORWARD and SIDE MOVMENT ==============
 
@@ -88,6 +89,19 @@ int PortableKeyEvent(int state, int code ,int unitcode)
 }
 
 
+static void KeyUpPort (kbutton_t *b)
+{
+	b->state = 4; 		// impulse up
+}
+static void KeyDownPort (kbutton_t *b)
+{
+	b->state |= 1 + 2; // down + impulse down
+}
+extern kbutton_t	in_mlook, in_klook;
+extern kbutton_t	in_left, in_right, in_forward, in_back;
+extern kbutton_t	in_lookup, in_lookdown, in_moveleft, in_moveright;
+extern kbutton_t	in_strafe, in_speed, in_use, in_attack;
+extern kbutton_t	in_up, in_down;
 void PortableAction(int state, int action)
 {
 	LOGI("PortableAction %d %d",state, action);
@@ -104,7 +118,99 @@ void PortableAction(int state, int action)
             return;
         }
     }
+    else
+    {
+        switch (action)
+            {
+        case PORT_ACT_LEFT:
+            (state)?KeyDownPort(&in_left):KeyUpPort(&in_left);
+            break;
+        case PORT_ACT_RIGHT:
+            (state)?KeyDownPort(&in_right):KeyUpPort(&in_right);
+            break;
+        case PORT_ACT_FWD:
+            (state)?KeyDownPort(&in_forward):KeyUpPort(&in_forward);
+            break;
+        case PORT_ACT_BACK:
+            (state)?KeyDownPort(&in_back):KeyUpPort(&in_back);
+            break;
+        case PORT_ACT_LOOK_UP:
+            (state)?KeyDownPort(&in_lookup):KeyUpPort(&in_lookup);
+            break;
+        case PORT_ACT_LOOK_DOWN:
+            (state)?KeyDownPort(&in_lookdown):KeyUpPort(&in_lookdown);
+            break;
+        case PORT_ACT_MOVE_LEFT:
+            (state)?KeyDownPort(&in_moveleft):KeyUpPort(&in_moveleft);
+            break;
+        case PORT_ACT_MOVE_RIGHT:
+            (state)?KeyDownPort(&in_moveright):KeyUpPort(&in_moveright);
+            break;
+        case PORT_ACT_STRAFE:
+            (state)?KeyDownPort(&in_strafe):KeyUpPort(&in_strafe);
+            break;
+        case PORT_ACT_SPEED:
+            (state)?KeyDownPort(&in_speed):KeyUpPort(&in_speed);
+            break;
+        case PORT_ACT_USE:
+            (state)?KeyDownPort(&in_use):KeyUpPort(&in_use);
+            break;
+        case PORT_ACT_ATTACK:
+            (state)?KeyDownPort(&in_attack):KeyUpPort(&in_attack);
+            break;
+        case PORT_ACT_JUMP:
+            //Jump is same as up
+        case PORT_ACT_UP:
+            (state)?KeyDownPort(&in_up):KeyUpPort(&in_up);
+            break;
+        case PORT_ACT_DOWN:
+            (state)?KeyDownPort(&in_down):KeyUpPort(&in_down);
+            break;
 
+        case PORT_ACT_NEXT_WEP:
+            if (state)
+                PortableCommand("weapnext\n");
+            break;
+        case PORT_ACT_PREV_WEP:
+            if (state)
+                PortableCommand("weapprev\n");
+            break;
+        case PORT_ACT_INVEN:
+            if (state)
+                PortableCommand("inven\n");
+            break;
+        case PORT_ACT_INVUSE:
+            if (state)
+                PortableCommand("invuse\n");
+            break;
+        case PORT_ACT_INVDROP:
+            if (state)
+                PortableCommand("invdrop\n");
+            break;
+        case PORT_ACT_INVPREV:
+            if (state)
+                PortableCommand("invprev\n");
+            break;
+        case PORT_ACT_INVNEXT:
+            if (state)
+                PortableCommand("invnext\n");
+            break;
+        case PORT_ACT_HELPCOMP:
+            if (state)
+                PortableCommand("cmd help\n");
+            break;
+        case PORT_ACT_QUICKSAVE:
+            PortableKeyEvent( state, SDL_SCANCODE_F6, 0 );
+            break;
+        case PORT_ACT_QUICKLOAD:
+            PortableKeyEvent( state, SDL_SCANCODE_F9, 0 );
+            break;
+        case PORT_ACT_CONSOLE:
+            if (state)
+                PortableCommand("toggleconsole");
+            break;
+        }
+	}
 }
 
 char * quickCommand = 0;
@@ -113,25 +219,17 @@ void PortableCommand(const char * cmd)
 	quickCommand = cmd;
 }
 
-/////////////////////
-// Movement handling
-////
 
-void IN_Move_Android( void )
-{
-
-}
-
-extern int key_dest;
+extern client_static_t	cls;
+extern	client_state_t	cl;
 touchscreemode_t PortableGetScreenMode()
 {
-	return TS_MENU;
-}
-
-
-void PortableAutomapControl(float zoom, float x, float y)
-{
-
+	if( cl.cinematicpalette_active )
+		return TS_BLANK;
+	else if( cls.key_dest == key_game)
+		return TS_GAME;
+	else
+		return TS_MENU;
 }
 
 void PortableBackButton()
@@ -148,12 +246,33 @@ void PortableInit(int argc,const char ** argv)
     main_android( argc, argv );
 }
 
-void PortableFrame()
+
+
+/////////////////////
+// Movement handling
+////
+
+void IN_Move_Android( usercmd_t *cmd )
 {
+	if (quickCommand)
+	{
+		Cmd_ExecuteString(quickCommand);
+		quickCommand = 0;
+	}
 
+	cmd->forwardmove += forwardmove * cl_forwardspeed->value * 2; //Always run! (x2)
+	cmd->sidemove  += sidemove   * cl_sidespeed->value * 2;
+
+
+	cl.viewangles[PITCH] += -look_pitch_mouse * 300;
+	look_pitch_mouse = 0;
+	cl.viewangles[PITCH] += look_pitch_joy * 6;
+
+
+	cl.viewangles[YAW] += look_yaw_mouse * 400;
+	look_yaw_mouse = 0;
+	cl.viewangles[YAW] += look_yaw_joy * 6;
 }
-
-
 
 
 

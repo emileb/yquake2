@@ -49,6 +49,8 @@
 
 #ifdef _WIN32
  #define CFGDIR "YamagiQ2"
+#elif __ANDROID__
+ #define CFGDIR "yq2" // Make not hidden to users can find it
 #else
  #define CFGDIR ".yq2"
 #endif

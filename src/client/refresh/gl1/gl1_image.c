@@ -1319,7 +1319,11 @@ R_InitImages(void)
 	registration_sequence = 1;
 
 	/* init intensity conversions */
+#ifdef __ANDROID__
+    intensity = ri.Cvar_Get("gl1_intensity", "2.5", CVAR_ARCHIVE); // Make brighter by default
+#else
 	intensity = ri.Cvar_Get("gl1_intensity", "2", CVAR_ARCHIVE);
+#endif
 
 	if (intensity->value <= 1)
 	{

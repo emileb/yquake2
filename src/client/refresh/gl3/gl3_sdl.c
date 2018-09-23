@@ -98,6 +98,19 @@ DebugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei le
  */
 void GL3_EndFrame(void)
 {
+#ifdef __ANDROID__ // The touch controls change state
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+    glEnable(GL_BLEND);
+
+    gl3state.currentVAO = -1;
+    gl3state. currentVBO = -1;
+    gl3state.currentEBO = -1;
+    gl3state.currentShaderProgram = -1;
+    gl3state.currentUBO = -1;
+#endif
+
 	SDL_GL_SwapWindow(window);
 }
 
@@ -138,6 +151,7 @@ int GL3_PrepareForWindow(void)
 		libgl = gl3_libgl->string;
 	}
 
+#ifndef USE_GLES3 // This must be done AFTER setting attributes otherwise GLES1 is loaded
 	while (1)
 	{
 		if (SDL_GL_LoadLibrary(libgl) < 0)
@@ -162,7 +176,7 @@ int GL3_PrepareForWindow(void)
 			break;
 		}
 	}
-
+#endif
 	// Set GL context attributs bound to the window.
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
@@ -179,9 +193,16 @@ int GL3_PrepareForWindow(void)
 		gl3config.stencil = false;
 	}
 
+#ifdef USE_GLES3
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+	SDL_GL_LoadLibrary(NULL);
+#else
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+#endif
 
 	// Set GL context flags.
 	int contextFlags = SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG;
@@ -190,12 +211,12 @@ int GL3_PrepareForWindow(void)
 	{
 		contextFlags |= SDL_GL_CONTEXT_DEBUG_FLAG;
 	}
-
+#ifndef USE_GLES3
 	if (contextFlags != 0)
 	{
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, contextFlags);
 	}
-
+#endif
 	// Let's see if the driver supports MSAA.
 	int msaa_samples = 0;
 

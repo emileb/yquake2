@@ -1546,7 +1546,11 @@ GL3_Clear(void)
 	gl3depthmax = 1;
 	glDepthFunc(GL_LEQUAL);
 
+#ifdef USE_GLES3
+	glDepthRangef(gl3depthmin, gl3depthmax);
+#else
 	glDepthRange(gl3depthmin, gl3depthmax);
+#endif
 
 	if (gl_zfix->value)
 	{
@@ -1576,6 +1580,7 @@ GL3_BeginFrame(float camera_separation)
 	{
 		vid_fullscreen->modified = true;
 	}
+
 
 #if 0 // TODO: stereo stuff
 	gl_state.camera_separation = camera_separation;
@@ -1641,7 +1646,7 @@ GL3_BeginFrame(float camera_separation)
 	if (gl_drawbuffer->modified)
 	{
 		gl_drawbuffer->modified = false;
-
+#ifndef USE_GLES3 // glDrawBuffer does not exist
 		// TODO: stereo stuff
 		//if ((gl3state.camera_separation == 0) || gl3state.stereo_mode != STEREO_MODE_OPENGL)
 		{
@@ -1654,6 +1659,7 @@ GL3_BeginFrame(float camera_separation)
 				glDrawBuffer(GL_BACK);
 			}
 		}
+#endif
 	}
 
 	/* texturemode stuff */

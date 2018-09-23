@@ -343,6 +343,7 @@ VID_ShutdownRenderer(void)
 
 #ifdef __ANDROID__
 extern const char *nativeLibsPath;
+int yquake2Renderer = 0; // 0 = soft, 1 = gl1, 3 = gl3
 #endif
 
 /*
@@ -376,7 +377,14 @@ VID_LoadRenderer(void)
 	snprintf(reflib_path, sizeof(reflib_path), "%s%s", Sys_GetBinaryDir(), reflib_name);
 	Com_Printf("LoadLibrary(%s)\n", reflib_name);
 #ifdef __ANDROID__
-	snprintf(reflib_path, sizeof(reflib_path), "%s%s", nativeLibsPath,"/libyquake2_gl1.so");
+	snprintf(reflib_path, sizeof(reflib_path), "%s/libyquake2_%s.so", nativeLibsPath,vid_renderer->string);
+	Com_Printf("LoadLibrary path(%s)\n", reflib_path);
+	if( !strcmp(vid_renderer->string,"soft") )
+	    yquake2Renderer = 0;
+    else if( !strcmp(vid_renderer->string,"gl1") )
+        yquake2Renderer = 1;
+    else if( !strcmp(vid_renderer->string,"gl3") )
+        yquake2Renderer = 3;
 #endif
 	// Mkay, let's load the requested renderer.
 	GetRefAPI = Sys_LoadLibrary(reflib_path, "GetRefAPI", &reflib_handle);
