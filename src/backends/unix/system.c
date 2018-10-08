@@ -382,6 +382,14 @@ Sys_GetGameAPI(void *parms)
     {
         gamename = "libyquake2_rogue.so";
     }
+    else if( getGameType() == Q2DLL_XATRIX )
+    {
+        gamename = "libyquake2_xatrix.so";
+    }
+    else if( getGameType() == Q2DLL_CTF )
+    {
+        gamename = "libyquake2_ctf.so";
+    }
 #else
 	const char *gamename = "game.so";
 #endif
