@@ -84,7 +84,11 @@ int RI_PrepareForWindow(void)
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+#ifdef __ANDROID__
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+#else
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+#endif
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
 	if (SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8) < 0)
