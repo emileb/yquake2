@@ -117,6 +117,11 @@ void PortableAction(int state, int action)
 
             return;
         }
+        else if( action == PORT_ACT_CONSOLE )
+        {
+            if (state)
+               PortableCommand("toggleconsole");
+        }
     }
     else
     {
@@ -226,7 +231,7 @@ touchscreemode_t PortableGetScreenMode()
 {
 	if( cl.cinematicpalette_active )
 		return TS_BLANK;
-	else if( cls.key_dest == key_game)
+	else if( cls.key_dest == key_game  && cls.state != ca_disconnected )
 		return TS_GAME;
 	else
 		return TS_MENU;

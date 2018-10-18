@@ -537,7 +537,11 @@ SCR_DrawConsole(void)
 	if ((cls.state == ca_disconnected) || (cls.state == ca_connecting))
 	{
 		/* forced full screen console */
+#ifdef __ANDROID__
+		Con_DrawConsole(0.5); // Always half screen for keyboard
+#else
 		Con_DrawConsole(1.0);
+#endif
 		return;
 	}
 
