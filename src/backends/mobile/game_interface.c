@@ -106,6 +106,12 @@ void PortableAction(int state, int action)
 {
 	LOGI("PortableAction %d %d",state, action);
 
+	if ((action >= PORT_ACT_CUSTOM_0) && (action <= PORT_ACT_CUSTOM_15))
+    {
+        if( action <= PORT_ACT_CUSTOM_7 )
+            PortableKeyEvent(state, SDL_SCANCODE_H + action - PORT_ACT_CUSTOM_0, 0);
+    }
+
 	if (( PortableGetScreenMode() == TS_MENU ) || ( PortableGetScreenMode() == TS_BLANK )  || ( PortableGetScreenMode() == TS_Y_N ))
     {
         if (action >= PORT_ACT_MENU_UP && action <= PORT_ACT_MENU_ABORT)
@@ -122,6 +128,16 @@ void PortableAction(int state, int action)
             if (state)
                PortableCommand("toggleconsole");
         }
+    }
+    else if( ((action >= PORT_ACT_WEAP0) && (action <= PORT_ACT_WEAP9)) )
+    {
+        int code = 0;
+        if(action == PORT_ACT_WEAP0)
+            code = SDL_SCANCODE_0;
+        else
+            code = SDL_SCANCODE_1 + action - PORT_ACT_WEAP1;
+
+        PortableKeyEvent(state,code, 0);
     }
     else
     {
