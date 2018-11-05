@@ -64,6 +64,7 @@ extern FILE	*logfile;
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO,"yquake2", __VA_ARGS__))
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "yquake2", __VA_ARGS__))
 #define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR,"yquake2", __VA_ARGS__))
+#include "LogWritter.h"
 #endif
 
 void
@@ -87,6 +88,8 @@ Sys_Error(char *error, ...)
 
 #ifdef __ANDROID__
 	LOGI("ERROR: %s", string);
+	LogWritter_Write("ERROR: ");
+    LogWritter_Write(string);
 #endif
 	exit(1);
 }
@@ -170,6 +173,7 @@ Sys_ConsoleOutput(char *string)
 {
 #ifdef __ANDROID__
 	LOGI("Sys_ConsoleOutput: %s", string);
+    LogWritter_Write(string);
 #endif
 	fputs(string, stdout);
 }
