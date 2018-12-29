@@ -34,7 +34,9 @@ void
 GL3_SetDefaultState(void)
 {
 	glClearColor(1, 0, 0.5, 0.5);
+#ifndef USE_GLES3
 	glDisable(GL_MULTISAMPLE);
+#endif
 	glCullFace(GL_FRONT);
 
 	glDisable(GL_DEPTH_TEST);

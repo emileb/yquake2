@@ -815,8 +815,9 @@ GL3_DrawParticles(void)
 
 		glDepthMask(GL_FALSE);
 		glEnable(GL_BLEND);
+#ifndef USE_GLES3
 		glEnable(GL_PROGRAM_POINT_SIZE);
-
+#endif
 		GL3_UseProgram(gl3state.siParticle.shaderProgram);
 
 		for ( i = 0, p = gl3_newrefdef.particles; i < numParticles; i++, p++ )
@@ -843,7 +844,9 @@ GL3_DrawParticles(void)
 
 		glDisable(GL_BLEND);
 		glDepthMask(GL_TRUE);
+#ifndef USE_GLES3
 		glDisable(GL_PROGRAM_POINT_SIZE);
+#endif
 	}
 }
 
