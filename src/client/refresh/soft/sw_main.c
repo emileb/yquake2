@@ -1828,6 +1828,9 @@ RE_EndFrame (void)
 
 	SDL_RenderCopy(renderer, texture, NULL, NULL);
 	SDL_RenderPresent(renderer);
+#ifdef __ANDROID__ // The touch controls change the viewport, call this to fix. This function does not exist in SDL2
+    SDL_ForceupdateViewport(renderer);
+#endif
 }
 
 /*
