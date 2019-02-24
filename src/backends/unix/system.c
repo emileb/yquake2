@@ -394,6 +394,19 @@ Sys_GetGameAPI(void *parms)
     {
         gamename = "libyquake2_ctf.so";
     }
+    else if( getGameType() == Q2DLL_3ZB2 )
+    {
+        gamename = "libyquake2_3zb2.so";
+    }
+    else if( getGameType() == Q2DLL_SMD )
+    {
+        gamename = "libyquake2_smd.so";
+    }
+    else if( getGameType() == Q2DLL_ZAERO )
+    {
+        gamename = "libyquake2_zaero.so";
+    }
+
 #else
 	const char *gamename = "game.so";
 #endif
