@@ -1578,6 +1578,10 @@ GL3_Clear(void)
 void
 GL3_BeginFrame(float camera_separation)
 {
+#ifdef __ANDROID__ // Fix state after touch controls
+	glBindTexture(GL_TEXTURE_2D, gl3state.currenttexture);
+#endif
+
 	/* change modes if necessary */
 	if (r_mode->modified)
 	{

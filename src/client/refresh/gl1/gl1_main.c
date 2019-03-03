@@ -1578,6 +1578,10 @@ RI_Shutdown(void)
 void
 RI_BeginFrame(float camera_separation)
 {
+#ifdef __ANDROID__ // Fix state after touch controls
+	glBindTexture(GL_TEXTURE_2D, gl_state.currenttextures[gl_state.currenttmu]);
+#endif
+
 	gl_state.camera_separation = camera_separation;
 
 	/* change modes if necessary */
