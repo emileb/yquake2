@@ -220,6 +220,12 @@ void PortableAction(int state, int action)
             if (state)
                 PortableCommand("cmd help\n");
             break;
+        case PORT_SMD_USE:
+            if (state)
+                PortableCommand("+use\n");
+            else
+                PortableCommand("-use\n");
+            break;
         case PORT_ACT_QUICKSAVE:
             PortableKeyEvent( state, SDL_SCANCODE_F6, 0 );
             break;
