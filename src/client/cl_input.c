@@ -551,6 +551,13 @@ CL_FinishMove(usercmd_t *cmd)
 		cmd->buttons |= BUTTON_ANY;
 	}
 
+#ifdef __ANDROID__
+    if ((cmd->buttons & BUTTON_ATTACK) && (cls.key_dest == key_game))
+    {
+        cmd->buttons |= BUTTON_ANY;
+    }
+#endif
+
 	/* send milliseconds of time to apply the move */
 	ms = cls.nframetime * 1000;
 
@@ -747,6 +754,13 @@ CL_FinalizeCmd(void)
 	{
 		cmd->buttons |= BUTTON_ANY;
 	}
+
+#ifdef __ANDROID__
+    if ((cmd->buttons & BUTTON_ATTACK) && (cls.key_dest == key_game))
+    {
+        cmd->buttons |= BUTTON_ANY;
+    }
+#endif
 
 	cmd->impulse = in_impulse;
 	in_impulse = 0;

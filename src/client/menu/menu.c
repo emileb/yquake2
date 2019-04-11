@@ -111,6 +111,9 @@ M_ForceMenuOff(void)
     m_menudepth = 0;
 	Key_MarkAllUp();
     Cvar_Set("paused", "0");
+#ifdef __ANDROID__
+    anykeydown = 0;
+#endif
 }
 
 void
@@ -2015,6 +2018,9 @@ StartGame(void)
 
     Cbuf_AddText("loading ; killserver ; wait ; newgame\n");
     cls.key_dest = key_game;
+#ifdef __ANDROID__
+    anykeydown = 0;
+#endif
 }
 
 static void
@@ -2326,6 +2332,9 @@ LoadGameCallback(void *self)
 
     Cbuf_AddText(va("load save%i\n", a->generic.localdata[0]));
     M_ForceMenuOff();
+#ifdef __ANDROID__
+    anykeydown = 0;
+#endif
 }
 
 static void

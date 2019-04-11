@@ -993,6 +993,10 @@ Key_Init(void)
 	Cmd_AddCommand("unbind", Key_Unbind_f);
 	Cmd_AddCommand("unbindall", Key_Unbindall_f);
 	Cmd_AddCommand("bindlist", Key_Bindlist_f);
+
+#ifdef __ANDROID__
+    anykeydown = 0;
+#endif
 }
 
 /*
