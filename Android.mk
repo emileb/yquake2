@@ -259,8 +259,8 @@ LOCAL_SRC_FILES :=  $(CLIENT_OBJS_:.o=.c) \
 
 
 LOCAL_LDLIBS :=  -lEGL -ldl -llog -lOpenSLES -lz
-LOCAL_STATIC_LIBRARIES := sigc libzip libpng logwritter license_static  libjpeg
-LOCAL_SHARED_LIBRARIES := touchcontrols SDL2 SDL2_mixer
+LOCAL_STATIC_LIBRARIES := sigc libzip libpng logwritter  libjpeg
+LOCAL_SHARED_LIBRARIES := touchcontrols SDL2 SDL2_mixer core_shared
 LOCAL_LDLIBS += -lGLESv1_CM
 #LOCAL_LDLIBS += -lGLESv2
 
