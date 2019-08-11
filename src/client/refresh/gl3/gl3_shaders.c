@@ -504,7 +504,7 @@ static const char* fragmentSrc3Dlm = MULTILINE_STRING(
 					lightToPos += passNormal*32.0;
 
 					// also factor in angle between light and point on surface
-					fact *= max(0, dot(passNormal, normalize(lightToPos)));
+					fact *= max(0.0, dot(passNormal, normalize(lightToPos)));
 
 
 					lmTex.rgb += dynLights[i].lightColor.rgb * fact * (1.0/256.0);
