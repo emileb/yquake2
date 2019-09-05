@@ -293,12 +293,12 @@ void IN_Move_Android( usercmd_t *cmd )
 
 	cl.viewangles[PITCH] += -look_pitch_mouse * 300;
 	look_pitch_mouse = 0;
-	cl.viewangles[PITCH] += look_pitch_joy * 6;
+	cl.viewangles[PITCH] += look_pitch_joy * 6 * (cls.nframetime * 1000.f / 16.f); // Presume was scaled at 60FPS
 
 
 	cl.viewangles[YAW] += look_yaw_mouse * 400;
 	look_yaw_mouse = 0;
-	cl.viewangles[YAW] += look_yaw_joy * 6;
+	cl.viewangles[YAW] += look_yaw_joy * 6 * (cls.nframetime * 1000.f / 16.f); // Presume was scaled at 60FPS
 }
 
 
