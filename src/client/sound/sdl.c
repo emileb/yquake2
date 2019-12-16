@@ -1280,6 +1280,11 @@ SDL_Callback(void *data, Uint8 *stream, int length)
 	}
 }
 
+#ifdef __ANDROID__
+extern int AUDIO_OVERRIDE_FREQ;
+extern int AUDIO_OVERRIDE_SAMPLES;
+#endif
+
 /*
  * Initializes the SDL sound
  * backend and sets up SDL.
@@ -1382,6 +1387,14 @@ SDL_BackendInit(void)
 
 	desired.channels = sndchans;
 	desired.callback = SDL_Callback;
+
+#ifdef __ANDROID__
+    if (AUDIO_OVERRIDE_FREQ != 0)
+        desired.freq = AUDIO_OVERRIDE_FREQ;
+
+    if (AUDIO_OVERRIDE_SAMPLES != 0)
+        desired.samples = AUDIO_OVERRIDE_SAMPLES;
+#endif
 
 	/* Okay, let's try our luck */
 	if (SDL_OpenAudio(&desired, &obtained) == -1)
