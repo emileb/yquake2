@@ -45,8 +45,11 @@ GL3_SetDefaultState(void)
 #ifndef USE_GLES3
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 #endif
-	// TODO: gl_texturemode, gl1_texturealphamode?
-	//GL3_TextureMode(gl_texturemode->string);
+
+
+	// TODO: gl1_texturealphamode?
+	GL3_TextureMode(gl_texturemode->string);
+
 	//R_TextureAlphaMode(gl1_texturealphamode->string);
 	//R_TextureSolidMode(gl1_texturesolidmode->string);
 
