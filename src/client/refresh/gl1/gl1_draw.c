@@ -352,8 +352,11 @@ RDraw_StretchRaw(int x, int y, int w, int h, int cols, int rows, byte *data)
 	int row;
 
 	R_Bind(0);
-
+#ifdef USE_GLES1
+	if(gl_config.npottextures) // Cinematics are 240
+#else
 	if(gl_config.npottextures || rows <= 256)
+#endif
 	{
 		// X, X
 		tex[0] = 0;
@@ -411,7 +414,11 @@ RDraw_StretchRaw(int x, int y, int w, int h, int cols, int rows, byte *data)
 		 * pixels to fit into a 256x256 texture.
 		 * This causes text in videos (which are 320x240) to not look broken anymore.
 		 */
+#ifdef USE_GLES1
+		if(gl_config.npottextures) // Cinematics are 240
+#else
 		if(gl_config.npottextures || rows <= 256)
+#endif
 		{
 			unsigned* img = image32;
 
