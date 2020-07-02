@@ -50,7 +50,11 @@
 #ifdef _WIN32
  #define CFGDIR "YamagiQ2"
 #else
+#ifdef __ANDROID__
+ #define CFGDIR "../user_files/yq2"
+#else
  #define CFGDIR ".yq2"
+#endif
 #endif
 
 /* ================================================================== */
