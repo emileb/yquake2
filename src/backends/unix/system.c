@@ -533,6 +533,11 @@ Sys_GetHomeDir(void)
 	static char gdir[MAX_OSPATH];
 	char *home;
 
+#ifdef __ANDROID__
+  	snprintf (gdir, sizeof(gdir), "%s/yq2", getenv("USER_FILES"));
+  	return gdir;
+#endif
+
 	home = getenv("HOME");
 
 	if (!home)
