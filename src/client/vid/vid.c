@@ -363,7 +363,8 @@ VID_LoadRenderer(void)
 
 	snprintf(reflib_name, sizeof(reflib_name), "ref_%s.%s", vid_renderer->string, lib_ext);
 	snprintf(reflib_path, sizeof(reflib_path), "%s%s", Sys_GetBinaryDir(), reflib_name);
-	Com_Printf("LoadLibrary(%s)\n", reflib_name);
+
+	Com_Printf("Loading library: %s\n", reflib_name);
 #ifdef __ANDROID__
 	snprintf(reflib_path, sizeof(reflib_path), "%s/libyquake2_%s.so", nativeLibsPath,vid_renderer->string);
 	Com_Printf("LoadLibrary path(%s)\n", reflib_path);
@@ -374,6 +375,7 @@ VID_LoadRenderer(void)
     else if( !strcmp(vid_renderer->string,"gl3") )
         yquake2Renderer = 3;
 #endif
+
 	// Mkay, let's load the requested renderer.
 	GetRefAPI = Sys_LoadLibrary(reflib_path, "GetRefAPI", &reflib_handle);
 
@@ -428,7 +430,7 @@ VID_LoadRenderer(void)
 	{
 		VID_ShutdownRenderer();
 
-		Com_Printf("ERROR: Loading %s as rendering backend failed!\n", reflib_name);
+		Com_Printf("ERROR: Loading %s as rendering backend failed.\n", reflib_name);
 		Com_Printf("------------------------------------\n\n");
 
 		return false;
@@ -437,7 +439,7 @@ VID_LoadRenderer(void)
 	/* Ensure that all key states are cleared */
 	Key_MarkAllUp();
 
-	Com_Printf("Successfully loaded %s as rendering backend\n", reflib_name);
+	Com_Printf("Successfully loaded %s as rendering backend.\n", reflib_name);
 	Com_Printf("------------------------------------\n\n");
 
 	return true;
