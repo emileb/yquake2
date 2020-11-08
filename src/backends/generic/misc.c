@@ -72,7 +72,8 @@ static void SetExecutablePath(char* exePath)
 		// an error occured, clear exe path
 		exePath[0] = '\0';
 	}
-
+#elif defined(__ANDROID__)
+	snprintf(exePath, PATH_MAX, "./");
 #elif defined(__linux)
 
 	// all the platforms that have /proc/$pid/exe or similar that symlink the
