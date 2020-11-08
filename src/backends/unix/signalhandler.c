@@ -126,6 +126,9 @@ terminate(int sig)
 void
 registerHandler(void)
 {
+#ifdef __ANDROID__
+	return;
+#endif
 	/* Crash */
 	signal(SIGSEGV, signalhandler);
 	signal(SIGILL, signalhandler);
