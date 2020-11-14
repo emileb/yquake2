@@ -5,6 +5,8 @@
 
 #include "../../client/header/client.h"
 
+#include "SmartToggle.h"
+
 // =================== FORWARD and SIDE MOVMENT ==============
 
 float forwardmove, sidemove; //Joystick mode
@@ -93,10 +95,17 @@ static void KeyUpPort (kbutton_t *b)
 {
 	b->state = 4; 		// impulse up
 }
+
 static void KeyDownPort (kbutton_t *b)
 {
 	b->state |= 1 + 2; // down + impulse down
 }
+
+static int KeyIsDown (kbutton_t *b)
+{
+	return b->state & 0x1;
+}
+
 extern kbutton_t	in_mlook, in_klook;
 extern kbutton_t	in_left, in_right, in_forward, in_back;
 extern kbutton_t	in_lookup, in_lookdown, in_moveleft, in_moveright;
@@ -184,9 +193,12 @@ void PortableAction(int state, int action)
             (state)?KeyDownPort(&in_up):KeyUpPort(&in_up);
             break;
         case PORT_ACT_DOWN:
-            (state)?KeyDownPort(&in_down):KeyUpPort(&in_down);
+			{
+				static SmartToggle_t smartToggle;
+				int activate = SmartToggleAction( &smartToggle, state, KeyIsDown(&in_down));
+				(activate)?KeyDownPort(&in_down):KeyUpPort(&in_down);
+			}
             break;
-
         case PORT_ACT_NEXT_WEP:
             if (state)
                 PortableCommand("weapnext\n");
@@ -282,7 +294,7 @@ void IN_Move_Android( usercmd_t *cmd )
 {
 	if (quickCommand)
 	{
-		Cmd_ExecuteString(quickCommand);
+		Cmd_ExecuteString((char*)quickCommand);
 		quickCommand = 0;
 	}
 
