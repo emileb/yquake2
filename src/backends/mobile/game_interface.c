@@ -115,7 +115,7 @@ void PortableAction(int state, int action)
 {
 	LOGI("PortableAction %d %d",state, action);
 
-	if ((action >= PORT_ACT_CUSTOM_0) && (action <= PORT_ACT_CUSTOM_15))
+	if ((action >= PORT_ACT_CUSTOM_0) && (action <= PORT_ACT_CUSTOM_17))
     {
         PortableKeyEvent(state, SDL_SCANCODE_H + action - PORT_ACT_CUSTOM_0, 0);
     }
